@@ -45,7 +45,7 @@ async def cmd_add_task(message: types.Message) -> None:
             message.from_user.id, session=session)
     if not limit:
         return await message.answer('Превышен лимит задач')
-    await message.answer('Введите задачу', reply_markup=main_keyboard)
+    await message.answer('Введите задачу')
     await BotStateGroup.task.set()
     await message.delete()
 
