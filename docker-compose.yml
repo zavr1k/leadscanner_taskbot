@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  app:
+    image: ssant/taskbot
+    ports:
+      - "8080:8080"
+    volumes:
+      - bot-db:/code
+    env_file:
+      - .env
+
+  caddy:
+    image: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8443:8443"
+    volumes:
+      - "./services/caddy/Caddyfile:/etc/caddy/Caddyfile"
+    depends_on:
+      - app
+
+volumes:
+  bot-db:

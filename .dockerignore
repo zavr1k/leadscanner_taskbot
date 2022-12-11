@@ -1,0 +1,16 @@
+.git/
+build
+dist
+*.egg-info
+*.egg/
+*.pyc
+*.swp
+.tox
+.coverage
+__pycache__
+poetry.lock
+pyproject.toml
+pyrightconfig.json
+test.db
+bot.db
+.pytest_cache/
