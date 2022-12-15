@@ -1,27 +1,6 @@
 version: "3"
 
 services:
-  # app:
-  #   image: ssant/taskbot
-  #   ports:
-  #     - "8080:8080"
-  #   volumes:
-  #     - bot-db:/code
-  #   env_file:
-  #     - .env
-
-  # caddy:
-  #   image: caddy
-  #   restart: unless-stopped
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #     - "8443:8443"
-  #   volumes:
-  #     - "./services/caddy/Caddyfile:/etc/caddy/Caddyfile"
-  #   depends_on:
-  #     - app
-
   db:
     image: postgres:14
     restart: always
@@ -33,6 +12,28 @@ services:
       POSTGRES_DB: ${DATABASE_NAME}
     volumes:
       - pgdata:/var/lib/postgresql/data
+
+  app:
+    # image: ssant/taskbot
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+  caddy:
+    image: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8443:8443"
+    volumes:
+      - "./services/caddy/Caddyfile:/etc/caddy/Caddyfile"
+    depends_on:
+      - app
 
 volumes:
   pgdata:
