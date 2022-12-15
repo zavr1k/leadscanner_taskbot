@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.crud import (add_task_to_session, add_user_to_session, delete_task,
+                      get_user_tasks)
 from src.database import get_session
 from src.schemas import CreateTask, CreateUser, Task, User
-from src.service import (add_task_to_session, add_user_to_session, delete_task,
-                         get_user_tasks)
 
 router = APIRouter()
 
