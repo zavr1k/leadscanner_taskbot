@@ -2,10 +2,10 @@ import uvicorn
 from aiogram import Bot, Dispatcher, types
 from fastapi import FastAPI
 
-from bot_api.taskbot import router
-from bot_telegram.taskbot import bot, dp
-from config import settings
-from database import async_session, init_models
+from src.bot_api.taskbot import router
+from src.bot_telegram.taskbot import bot, dp
+from src.config import settings
+from src.database import async_session
 
 WEBHOOK_PATH = f'/{settings.API_TOKEN}/'
 WEBHOOK_URL = f'https://{settings.WEBHOOK_HOST}{WEBHOOK_PATH}'
@@ -22,7 +22,7 @@ async def on_startup() -> None:
     await bot.set_webhook(
         url=WEBHOOK_URL,
     )
-    await init_models()
+    # await init_models()
 
 
 @app.on_event('shutdown')

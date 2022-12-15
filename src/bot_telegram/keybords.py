@@ -1,7 +1,7 @@
 from aiogram.types import (InlineKeyboardButton, InlineKeyboardMarkup,
                            KeyboardButton, ReplyKeyboardMarkup)
 
-from schemas import Task
+from src.schemas import Task
 
 
 def get_task_keyboard(tasks: list[Task]) -> InlineKeyboardMarkup:

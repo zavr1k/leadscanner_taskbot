@@ -4,9 +4,9 @@ from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-import models as m
-import schemas as s
-from config import MAX_USER_TASKS
+import src.models as m
+import src.schemas as s
+from src.config import MAX_USER_TASKS
 
 
 def add_user_to_session(user: s.CreateUser, session: AsyncSession) -> m.User:

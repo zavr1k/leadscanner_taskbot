@@ -3,10 +3,10 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import Dispatcher, FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
-import service
-from bot_telegram.keybords import get_task_keyboard, main_keyboard
-from config import settings
-from schemas import CreateTask
+from src import service
+from src.bot_telegram.keybords import get_task_keyboard, main_keyboard
+from src.config import settings
+from src.schemas import CreateTask
 
 storage = MemoryStorage()
 bot = Bot(settings.API_TOKEN)
