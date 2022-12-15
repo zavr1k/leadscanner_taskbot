@@ -11,5 +11,5 @@ compose-down:
 	docker-compose down
 
 migrate:
-	docker-compose exec db alembic upgrade head
+	docker-compose exec app alembic upgrade head
 
