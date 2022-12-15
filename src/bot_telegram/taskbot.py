@@ -6,6 +6,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from src import service
 from src.bot_telegram.keybords import get_task_keyboard, main_keyboard
 from src.config import settings
+from src.database import async_session
 from src.schemas import CreateTask
 
 storage = MemoryStorage()
@@ -20,8 +21,7 @@ class BotStateGroup(StatesGroup):
 @dp.message_handler(commands=['start'])
 async def cmd_start(message: types.Message) -> None:
     """Welcomes the user and adding it to the database if it doesn't exist"""
-    db = message.bot.get('db')
-    async with db() as session:
+    async with async_session() as session:
         await service.create_user_if_not_exist(
             user_id=message.from_user.id,
             username=message.from_user.username,
@@ -39,8 +39,7 @@ async def cmd_add_task(message: types.Message) -> None:
     """Checks the number of user tasks
     and changes the state of the bot to add a new task
     """
-    db = message.bot.get('db')
-    async with db() as session:
+    async with async_session() as session:
         limit = await service.has_task_limit(
             message.from_user.id, session=session)
     if not limit:
@@ -53,8 +52,7 @@ async def cmd_add_task(message: types.Message) -> None:
 @dp.message_handler(state=BotStateGroup.task)
 async def task_entry(message: types.Message, state: FSMContext) -> None:
     """Adds a new user task"""
-    db = message.bot.get('db')
-    async with db() as session:
+    async with async_session() as session:
         new_task = CreateTask(
             user_id=message.from_user.id, title=message.text)
         service.add_task_to_session(task=new_task, session=session)
@@ -66,8 +64,7 @@ async def task_entry(message: types.Message, state: FSMContext) -> None:
 @dp.message_handler(commands=['list'])
 async def cmd_list_task(message: types.Message) -> None:
     """Display all user tasks"""
-    db = message.bot.get('db')
-    async with db() as session:
+    async with async_session() as session:
         tasks = await service.get_user_tasks(
             user_id=message.from_user.id,
             session=session)
@@ -87,9 +84,8 @@ async def cmd_list_task(message: types.Message) -> None:
 @dp.callback_query_handler()
 async def remove_task_callback(callback: types.CallbackQuery):
     """Deletes the task and displays the updated inlinekeyboard"""
-    db = callback.message.bot.get('db')
     task_id = int(callback.data)
-    async with db() as session:
+    async with async_session() as session:
         await service.delete_task(task_id=task_id, session=session)
         user = await service.get_user_by_id(
             user_id=callback.from_user.id,

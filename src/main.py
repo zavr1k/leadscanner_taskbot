@@ -5,7 +5,6 @@ from fastapi import FastAPI
 from src.bot_api.taskbot import router
 from src.bot_telegram.taskbot import bot, dp
 from src.config import settings
-from src.database import async_session
 
 WEBHOOK_PATH = f'/{settings.API_TOKEN}/'
 WEBHOOK_URL = f'https://{settings.WEBHOOK_HOST}{WEBHOOK_PATH}'
@@ -16,13 +15,11 @@ app.include_router(router=router)
 
 @app.on_event('startup')
 async def on_startup() -> None:
-    bot['db'] = async_session
     await dp.skip_updates()
     await bot.delete_webhook()
     await bot.set_webhook(
         url=WEBHOOK_URL,
     )
-    # await init_models()
 
 
 @app.on_event('shutdown')
